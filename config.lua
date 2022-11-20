@@ -1,8 +1,6 @@
 Config = {}
 
 Config.marker = vector3(285.9362, -586.7862, 43.3781)
---Config.GetShared = 'esx:getSharedObject'
-
 
 Config.TopLeftInfoBox = true
 Config.ShowBorder = true
