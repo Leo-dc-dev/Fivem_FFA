@@ -167,6 +167,51 @@ AddEventHandler('insertin', function ()
     
 end)
 
+-- FFA Stats Discord Webhook --
+
+function FaaTopSendToDiscord(title,message,color)
+    local embeds = {
+        {
+            author = {
+                name                = "Leo FFA",
+                url                 = "https://dsc.gg/champcl",
+                icon_url            = "https://media.discordapp.net/attachments/1025735895070023740/1041799430392791140/C20Logo.png",
+            },
+            thumbnail = {
+                url                 = 'https://media.discordapp.net/attachments/1025735895070023740/1041799430392791140/C20Logo.png',
+            },
+                ["title"]           = title,
+                ["description"]     = message,
+                ["type"]            = "rich",
+                ["color"]           = color,
+                ["footer"] = {
+                ["text"]            = "FFA - Leo - " .. os.date("%d.%m.%y") .. " - " .. os.date("%X") .. " Uhr",
+                    ["icon_url"]    = "https://media.discordapp.net/attachments/1025735895070023740/1041799430392791140/C20Logo.png",
+                },
+            }
+        }
+    if message == nil or message == '' then return FALSE end
+    PerformHttpRequest("https://discord.com/api/webhooks/1041802918556352655/xEVMMopAU9aQoBi7HQIritpDSMk8w5qjf0x3BQ7L6ri6PTZPYC-PfAw56BWLBQb_li37", function(err, text, headers) end, 'POST', json.encode({ username = "FFA - Leo",embeds = embeds}), { ['Content-Type'] = 'application/json' })
+end
+
+AddEventHandler('onResourceStart', function(resourceName)
+    local info = {}
+
+    if (GetCurrentResourceName() ~= resourceName) then
+      return
+    end
+
+    Wait(3000)
+
+    MySQL.Async.fetchAll('SELECT * FROM ffa ORDER BY kills DESC LIMIT 10', {
+	}, function(data)
+        if data[1].name ~= nil then
+            FaaTopSendToDiscord("» FFA Top 10", "#1 " .. data[1].name .. " Kills: " .. data[1].kills .. "\n#2 " .. data[2].name .. " Kills: " .. data[2].kills .. "\n#3 " .. data[3].name .. " Kills: " .. data[3].kills .. "\n#4 " .. data[4].name .. " Kills: " .. data[4].kills .. "\n#5 " .. data[5].name .. " Kills: " .. data[5].kills .. "\n#6 " .. data[6].name .. " Kills: " .. data[6].kills .. "\n#7 " .. data[7].name .. " Kills: " .. data[7].kills .. "\n#8 " .. data[8].name .. " Kills: " .. data[8].kills .. "\n#9 " .. data[9].name .. " Kills: " .. data[9].kills .. "\n#10 " .. data[10].name .. " Kills: " .. data[10].kills .. "")
+            print("[" .. resourceName .. "] Current FFA Stats send to Discord Webhook sucessfully")
+        end
+    end)
+end)
+
 
 RegisterServerEvent('suckdick:saveInfo')
 AddEventHandler('suckdick:saveInfo', function(_kills, _deaths)
